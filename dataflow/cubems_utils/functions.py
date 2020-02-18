@@ -1,7 +1,8 @@
-import re
+from __future__ import absolute_import
 from io import StringIO
 
 def string_to_dict(col_names, string_input):
+  import re
   """
   Transform each row of PCollection, which is one string from reading,
   to dictionary which can be read by BigQuery
@@ -11,6 +12,7 @@ def string_to_dict(col_names, string_input):
   return row
 
 def string_to_timestamp(input):
+  import re
   """
   Transform "Date" from CUBEMS (YYYY-MM-DD HH:mm:ss) to
   BigQuery read-able format Timestamp (YYYY-MM-DDTHH:mm:ss)

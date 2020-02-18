@@ -1,5 +1,7 @@
+from __future__ import absolute_import
+
 def get_names_from_schema(input):
-  return input['fields'].map(lambda field: field['name'], input)
+  return map(lambda field: field['name'], input['fields'])
 
 schema_floor1 = {
   'fields': [
