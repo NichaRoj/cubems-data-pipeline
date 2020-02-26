@@ -2,6 +2,6 @@
   "public": "public",
   "functions": {
     "source": ".",
-    "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"]
+    "predeploy": ["rm -rf lib", "npm --prefix \"$RESOURCE_DIR\" run build"]
   }
 }
