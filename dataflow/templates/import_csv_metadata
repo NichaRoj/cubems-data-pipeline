@@ -1,0 +1,12 @@
+{
+  "description": "A simple pipeline for import CSV files to BigQuery",
+  "name": "Import CSV",
+  "parameters": [
+    {
+      "name": "input_path"
+    },
+    {
+      "name": "output_path"
+    }
+  ]
+}

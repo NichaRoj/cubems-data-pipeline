@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from io import StringIO
+import datetime
 
 def string_to_dict(col_names, string_input):
   import re
@@ -11,12 +12,10 @@ def string_to_dict(col_names, string_input):
   row = dict(zip(col_names, values))
   return row
 
-def string_to_timestamp(input):
+def milli_to_datetime(input):
   import re
-  """
-  Transform "Date" from CUBEMS (YYYY-MM-DD HH:mm:ss) to
-  BigQuery read-able format Timestamp (YYYY-MM-DDTHH:mm:ss)
-  """
+  
   output = input.copy()
-  output['timestamp'] = re.sub(' ', 'T', output['timestamp'])
+  dt = datetime.datetime.fromtimestamp(int(input['timestamp'])//1000)
+  output['timestamp'] = dt.strftime('%Y-%m-%d %H:%M:%S')
   return output
