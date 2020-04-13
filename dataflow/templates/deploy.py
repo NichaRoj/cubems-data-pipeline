@@ -28,8 +28,8 @@ def deploy(argv=None):
       --requirements_file requirements.txt \
       --staging_location gs://{bucket}/staging \
       --temp_location gs://{bucket}/temp \
-      --template_location \
-          gs://{bucket}/templates/{template_name}
+      --template_location gs://{bucket}/templates/{template_name} \
+      --region asia-east1
   '''.format(project=args.projectID, bucket=args.bucket, template_name=args.template)
   os.system(command)
   os.system('''

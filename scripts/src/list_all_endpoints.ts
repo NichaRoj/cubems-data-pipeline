@@ -1,6 +1,7 @@
 import axios from "axios";
 import { range } from "lodash";
 import { promises as fs } from "fs";
+import { Storage } from "@google-cloud/storage";
 
 interface PointId {
   id: number;
@@ -22,6 +23,12 @@ const url = id =>
 
 const writeToJson = async data => {
   await fs.writeFile("endpoints.json", JSON.stringify(data, null, 2));
+};
+
+const writeToStorage = async data => {
+  const storage = new Storage();
+  const bucket = storage.bucket("cubems-data-pipeline.appspot.com");
+  await bucket.file("endpoints.json").save(JSON.stringify(data, null, 2));
 };
 
 export default async (num: number) => {
@@ -52,6 +59,7 @@ export default async (num: number) => {
     }
 
     await writeToJson(data);
+    await writeToStorage(data);
   } catch (error) {
     console.error(error);
   }
