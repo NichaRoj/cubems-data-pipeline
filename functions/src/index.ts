@@ -4,10 +4,6 @@ import { cloneDeep } from "lodash";
 import { bucket } from "./firebase";
 import { google } from "googleapis";
 
-// id: 1* is overall energy/power usage, 2* is for chamchuri5 energy/power usage
-// 3-9 are energy/power usage for each floor (floor 1-7)
-// 10-42* are energy/power usage by
-//
 const baseUrl = (
   id: number,
   period: "day" | "month" | "year",
@@ -28,7 +24,7 @@ const headers = ["Timestamp", "Value"];
 
 const extractData = (data: CubemsData) => {
   const raw = cloneDeep(data.graph);
-  let points = raw.map(point => `${point.x},${point.y}`);
+  let points = raw.map((point) => `${point.x},${point.y}`);
   points.unshift(headers.join(","));
   const csv = points.join("\r\n");
   return csv;
@@ -38,7 +34,7 @@ export const import_every_fifteen = functions
   .region("asia-east2")
   .pubsub.schedule("every 15 minutes")
   .timeZone("Asia/Bangkok")
-  .onRun(async context => {
+  .onRun(async (context) => {
     const result = await axios.get(baseUrl(101, "day", "peak"));
     const data = result.data as CubemsData;
     await bucket.file(extractLocation(data) + ".csv").save(extractData(data));
@@ -47,20 +43,16 @@ export const import_every_fifteen = functions
 export const default_import_to_bigquery = functions
   .region("asia-east2")
   .storage.object()
-  .onFinalize(async object => {
+  .onFinalize(async (object) => {
     try {
-      const filePath = object.name
-        ?.substring(5)
-        .split("/")
-        .splice(1)
-        .join("/");
+      const filePath = object.name?.substring(5).split("/").splice(1).join("/");
 
       // Exit function if file changes are in temporary or staging folder
       if (filePath?.includes("staging") || filePath?.includes("temp")) return;
 
       const dataflow = google.dataflow("v1b3");
       const auth = await google.auth.getClient({
-        scopes: ["https://www.googleapis.com/auth/cloud-platform"]
+        scopes: ["https://www.googleapis.com/auth/cloud-platform"],
       });
 
       let request = {
@@ -70,14 +62,14 @@ export const default_import_to_bigquery = functions
         requestBody: {
           jobName: `import-csv-${filePath?.replace("/", "-")}`,
           environment: {
-            tempLocation: "gs://staging.cubems-data-pipeline.appspot.com/temp"
+            tempLocation: "gs://staging.cubems-data-pipeline.appspot.com/temp",
           },
           parameters: {
             input_path:
               "gs://cubems-data-pipeline.appspot.com/chamchuri5/fl1/elevator_hall/shaft_room/aircon.csv",
-            output_path: "cubems-data-pipeline:test2.aircon"
-          }
-        }
+            output_path: "cubems-data-pipeline:test2.aircon",
+          },
+        },
       };
 
       return dataflow.projects.templates.launch(request);
