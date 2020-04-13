@@ -15,9 +15,9 @@ def run(argv=None):
 
     def string_to_dict(col_names, string_input):
         """
-            Transform each row of PCollection, which is one string from reading,
-            to dictionary which can be read by BigQuery
-            """
+        Transform each row of PCollection, which is one string from reading,
+        to dictionary which can be read by BigQuery
+        """
         values = re.split(',', re.sub(
             '\r\n', '', re.sub(u'"', '', string_input)))
         row = dict(zip(col_names, values))
@@ -72,7 +72,7 @@ def run(argv=None):
     gcp_options.region = 'asia-east1'
     gcp_options.job_name = 'testjob'
     gcp_options.temp_location = 'gs://cubems-data-pipeline.appspot.com/temp_location'
-    options.view_as(StandardOptions).runner = 'DirectRunner'
+    options.view_as(StandardOptions).runner = 'DataflowRunner'
 
     p = beam.Pipeline(options=options)
 
@@ -87,7 +87,7 @@ def run(argv=None):
          write_disposition=beam.io.BigQueryDisposition.WRITE_TRUNCATE)
      )
 
-    p.run().wait_until_finish()
+    p.run()
 
 
 if __name__ == '__main__':

@@ -37,13 +37,13 @@ OR create `.env` with the following content
 GOOGLE_APPLICATION_CREDENTIALS=/path/to/key.json
 ```
 
-2. Run pipeline locally.
+2. Run pipeline. Check `direct-runner.py` for local pipeline template and `dataflow-runner.py` for dataflow pipeline template
 
 ```
-python3 direct-runner.py
+python3 pipeline-file.py
 ```
 
-3. Deploying FDataflow Template. The filename must be the same as template name and the file must follow the guideline https://cloud.google.com/dataflow/docs/guides/templates/creating-templates
+3. Deploying Dataflow Template. The filename must be the same as template name and the file must follow the guideline https://cloud.google.com/dataflow/docs/guides/templates/creating-templates
 
 ```
 python3 deploy.py --template [template name]
