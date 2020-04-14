@@ -23,23 +23,31 @@ def run(argv=None):
         default='cubems-data-pipeline.appspot.com'
     )
 
-    args = parser.parse_args()
+    parser.add_argument('--requirements_file')
+
+    known_args, pipeline_args = parser.parse_known_args(argv)
+
+    requirements = '--requirements_file {requirements_file}'.format(
+        requirements_file=known_args.requirements_file) if known_args.requirements_file else ''
 
     command = '''
-    python -m {template_name} \
+    python3 -m {template_name} \
       --runner DataflowRunner \
       --project {project} \
-      --requirements_file requirements.txt \
+      {requirements} \
       --staging_location gs://{bucket}/staging \
       --temp_location gs://{bucket}/temp \
       --template_location gs://{bucket}/templates/{template_name} \
-      --region asia-east1
-  '''.format(project=args.projectID, bucket=args.bucket, template_name=args.template)
+      --region asia-east1 \
+      --service_account_email=dataflow-service@cubems-data-pipeline.iam.gserviceaccount.com \
+      {pipeline_args}
+  '''.format(project=known_args.projectID, bucket=known_args.bucket, template_name=known_args.template, pipeline_args=' '.join(pipeline_args), requirements=requirements)
     os.system(command)
-    os.system('''
-    gsutil cp {template_name}_metadata \
-      gs://{bucket}/templates/
-  '''.format(bucket=args.bucket, template_name=args.template))
+
+#     os.system('''
+#     gsutil cp {template_name}_metadata \
+#       gs://{bucket}/templates/
+#   '''.format(bucket=known_args.bucket, template_name=known_args.template))
 
 
 if __name__ == '__main__':

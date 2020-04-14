@@ -13,58 +13,58 @@ class ImportOptions(PipelineOptions):
     def _add_argparse_args(cls, parser):
         parser.add_value_provider_argument(
             '--input',
-            type=str,
-            required=True
+            type=str
         )
-        parser.add_argument(
+        parser.add_value_provider_argument(
             '--output',
-            type=str,
-            required=True
+            type=str
         )
-
-
-class StringToTableRefFn(beam.DoFn):
-    def __init__(self, output_path):
-        self.output_path = output_path
-
-    def process(self):
-        s = self.output_path.get()
-        yield s
-        # project_id = s.split(':')[0]
-        # dataset_id = s.split(':')[1].split('.')[0]
-        # table_id = s.split(':')[1].split('.')[1]
-
-        # yield bigquery.TableReference(
-        #   projectId=project_id,
-        #   datasetId=dataset_id,
-        #   tableId=table_id
-        # )
 
 
 def run():
-    options = PipelineOptions()
-    gcp_options = options.view_as(GoogleCloudOptions)
-    gcp_options.project = 'cubems-data-pipeline'
-    gcp_options.region = 'asia-east1'
-    # gcp_options.job_name = 'import_csv'
-    gcp_options.temp_location = 'gs://cubems-data-pipeline.appspot.com/temp'
-    gcp_options.staging_location = 'gs://cubems-data-pipeline.appspot.com/staging'
-    gcp_options.template_location = 'gs://cubems-data-pipeline.appspot.com/templates/import_csv'
-    options.view_as(StandardOptions).runner = 'DataflowRunner'
-    options.view_as(SetupOptions).setup_file = './setup.py'
+    import re
+    import datetime
 
-    p = beam.Pipeline(options=options)
-    runtimeParams = options.view_as(ImportOptions)
-    # tableRef = string_to_table_ref(StaticValueProvider(str, runtimeParams.output_path))
+    def string_to_dict(col_names, string_input):
+        """
+        Transform each row of PCollection, which is one string from reading,
+        to dictionary which can be read by BigQuery
+        """
+        values = re.split(',', re.sub(
+            '\r\n', '', re.sub(u'"', '', string_input)))
+        row = dict(zip(col_names, values))
+        return row
+
+    def milli_to_datetime(input):
+
+        output = input.copy()
+        dt = datetime.datetime.fromtimestamp(int(input['timestamp'])//1000)
+        output['timestamp'] = dt.strftime('%Y-%m-%d %H:%M:%S')
+        return output
+
+    def get_names_from_schema(input):
+        return map(lambda field: field['name'], input['fields'])
+
+    schema = {
+        'fields': [
+            {'name': 'timestamp', 'type': 'DATETIME', 'mode': 'REQUIRED'},
+            {'name': 'value', 'type': 'NUMERIC', 'mode': 'NULLABLE'}
+        ]
+    }
+
+    pipeline_options = PipelineOptions()
+    pipeline_options.view_as(SetupOptions).save_main_session = True
+    runtime_params = PipelineOptions().view_as(ImportOptions)
+    p = beam.Pipeline(options=pipeline_options)
     (p
-     | 'Read CSV' >> beam.io.ReadFromText(runtimeParams.input_path, skip_header_lines=1)
-     | 'Transform string to dictionary' >> beam.Map(lambda s: string_to_dict(get_names_from_schema(schema_default), s))
+     | 'Read CSV' >> beam.io.ReadFromText(runtime_params.input, skip_header_lines=1)
+     | 'Transform string to dictionary' >> beam.Map(lambda s: string_to_dict(get_names_from_schema(schema), s))
      | 'Transform string to valid timestamp' >> beam.Map(lambda s: milli_to_datetime(s))
      | 'Write to BigQuery' >> beam.io.WriteToBigQuery(
-         runtimeParams.output_path,
-         schema=schema_default,
+         runtime_params.output,
+         schema=schema,
          create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
-         write_disposition=beam.io.BigQueryDisposition.WRITE_TRUNCATE)
+         write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
      )
 
     p.run()

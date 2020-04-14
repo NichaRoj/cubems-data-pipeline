@@ -30,17 +30,6 @@ def run(argv=None):
         output['timestamp'] = dt.strftime('%Y-%m-%d %H:%M:%S')
         return output
 
-    def string_to_table_ref(s):
-        project_id = s.split(':')[0]
-        dataset_id = s.split(':')[1].split('.')[0]
-        table_id = s.split(':')[1].split('.')[1]
-
-        return bigquery.TableReference(
-            projectId=project_id,
-            datasetId=dataset_id,
-            tableId=table_id
-        )
-
     def get_names_from_schema(input):
         return map(lambda field: field['name'], input['fields'])
 
@@ -84,7 +73,7 @@ def run(argv=None):
          args.output,
          schema=schema,
          create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
-         write_disposition=beam.io.BigQueryDisposition.WRITE_TRUNCATE)
+         write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
      )
 
     p.run()

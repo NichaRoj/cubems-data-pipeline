@@ -40,39 +40,50 @@ export const import_every_fifteen = functions
     await bucket.file(extractLocation(data) + ".csv").save(extractData(data));
   });
 
-export const default_import_to_bigquery = functions
+export const csv_to_bq = functions
   .region("asia-east2")
   .storage.object()
   .onFinalize(async (object) => {
     try {
-      const filePath = object.name?.substring(5).split("/").splice(1).join("/");
+      const filePath = object.name?.replace(".csv", "");
 
       // Exit function if file changes are in temporary or staging folder
-      if (filePath?.includes("staging") || filePath?.includes("temp")) return;
+      if (
+        filePath?.includes("staging") ||
+        filePath?.includes("temp") ||
+        filePath?.includes("templates")
+      )
+        return;
 
       const dataflow = google.dataflow("v1b3");
       const auth = await google.auth.getClient({
         scopes: ["https://www.googleapis.com/auth/cloud-platform"],
       });
 
+      const biqQueryOutput = `cubems-data-pipeline:raw_${
+        filePath?.split("/")[0]
+      }.${filePath
+        ?.replace(`${filePath?.split("/")[0]}/`, "")
+        .replace(/\//g, "_")}`;
+
       let request = {
         auth,
         projectId: process.env.GCLOUD_PROJECT,
-        gcsPath: "gs://cubems-data-pipeline.appspot.com/templates/import_csv",
+        location: "asia-east1",
+        gcsPath: "gs://cubems-data-pipeline.appspot.com/templates/csv_to_bq",
         requestBody: {
-          jobName: `import-csv-${filePath?.replace("/", "-")}`,
+          jobName: `csv-to-bq-${filePath?.replace(/\//g, "-")}`,
           environment: {
             tempLocation: "gs://staging.cubems-data-pipeline.appspot.com/temp",
           },
           parameters: {
-            input_path:
-              "gs://cubems-data-pipeline.appspot.com/chamchuri5/fl1/elevator_hall/shaft_room/aircon.csv",
-            output_path: "cubems-data-pipeline:test2.aircon",
+            input: `gs://cubems-data-pipeline.appspot.com/${object.name}`,
+            output: biqQueryOutput,
           },
         },
       };
 
-      return dataflow.projects.templates.launch(request);
+      return dataflow.projects.locations.templates.launch(request);
     } catch (error) {
       throw new Error(error);
     }
