@@ -1,0 +1,358 @@
+[
+  {
+    "id": "52",
+    "path": "chamchuri5/fl5/z1/elevator_hall/shaft_room/air"
+  },
+  {
+    "id": "53",
+    "path": "chamchuri5/fl5/z1/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "54",
+    "path": "chamchuri5/fl5/z1/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "57",
+    "path": "chamchuri5/fl5/z2/elevator_hall/shaft_room/air"
+  },
+  {
+    "id": "58",
+    "path": "chamchuri5/fl5/z2/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "59",
+    "path": "chamchuri5/fl5/z2/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "60",
+    "path": "chamchuri5/fl6/z4/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "61",
+    "path": "chamchuri5/fl6/z4/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "64",
+    "path": "chamchuri5/fl6/z3/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "65",
+    "path": "chamchuri5/fl6/z3/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "66",
+    "path": "chamchuri5/fl6/z2/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "67",
+    "path": "chamchuri5/fl6/z2/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "68",
+    "path": "chamchuri5/fl6/z2/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "69",
+    "path": "chamchuri5/fl6/z4/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "70",
+    "path": "chamchuri5/fl6/z1/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "71",
+    "path": "chamchuri5/fl6/z1/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "72",
+    "path": "chamchuri5/fl6/z1/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "73",
+    "path": "chamchuri5/fl6/z5/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "74",
+    "path": "chamchuri5/fl6/z5/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "75",
+    "path": "chamchuri5/fl6/z5/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "76",
+    "path": "chamchuri5/fl4/z1/elevator_hall/shaft_room/a1air"
+  },
+  {
+    "id": "77",
+    "path": "chamchuri5/fl4/z1/elevator_hall/shaft_room/a1light"
+  },
+  {
+    "id": "78",
+    "path": "chamchuri5/fl4/z1/elevator_hall/shaft_room/a1outlet"
+  },
+  {
+    "id": "79",
+    "path": "chamchuri5/fl4/z2/elevator_hall/shaft_room/a2air"
+  },
+  {
+    "id": "80",
+    "path": "chamchuri5/fl4/z2/elevator_hall/shaft_room/a2light"
+  },
+  {
+    "id": "81",
+    "path": "chamchuri5/fl4/z2/elevator_hall/shaft_room/a2outlet"
+  },
+  {
+    "id": "83",
+    "path": "chamchuri5/fl4/z3/elevator_hall/shaft_room/a3light"
+  },
+  {
+    "id": "84",
+    "path": "chamchuri5/fl4/z3/elevator_hall/shaft_room/a3outlet"
+  },
+  {
+    "id": "85",
+    "path": "chamchuri5/fl4/z4/elevator_hall/shaft_room/a4air"
+  },
+  {
+    "id": "86",
+    "path": "chamchuri5/fl4/z4/elevator_hall/shaft_room/a4light"
+  },
+  {
+    "id": "87",
+    "path": "chamchuri5/fl4/z4/elevator_hall/shaft_room/a4outlet"
+  },
+  {
+    "id": "88",
+    "path": "chamchuri5/fl4/z5/elevator_hall/shaft_room/a5air"
+  },
+  {
+    "id": "89",
+    "path": "chamchuri5/fl4/z5/elevator_hall/shaft_room/a5light"
+  },
+  {
+    "id": "90",
+    "path": "chamchuri5/fl4/z5/elevator_hall/shaft_room/a5outlet"
+  },
+  {
+    "id": "93",
+    "path": "chamchuri5/fl1/z1/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "94",
+    "path": "chamchuri5/fl1/z1/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "96",
+    "path": "chamchuri5/fl1/z3/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "97",
+    "path": "chamchuri5/fl1/z3/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "99",
+    "path": "chamchuri5/fl1/z4/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "101",
+    "path": "chamchuri5/fl1/z2/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "102",
+    "path": "chamchuri5/fl1/z2/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "103",
+    "path": "chamchuri5/fl1/z2/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "105",
+    "path": "chamchuri5/fl2/z3/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "106",
+    "path": "chamchuri5/fl2/z3/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "107",
+    "path": "chamchuri5/fl2/z4/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "108",
+    "path": "chamchuri5/fl2/z4/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "109",
+    "path": "chamchuri5/fl2/z4/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "110",
+    "path": "chamchuri5/fl2/z1/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "111",
+    "path": "chamchuri5/fl2/z1/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "112",
+    "path": "chamchuri5/fl2/z1/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "113",
+    "path": "chamchuri5/fl2/z2/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "114",
+    "path": "chamchuri5/fl2/z2/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "115",
+    "path": "chamchuri5/fl2/z2/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "116",
+    "path": "chamchuri5/fl3/z1/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "117",
+    "path": "chamchuri5/fl3/z1/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "118",
+    "path": "chamchuri5/fl3/z1/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "119",
+    "path": "chamchuri5/fl3/z2/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "120",
+    "path": "chamchuri5/fl3/z2/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "121",
+    "path": "chamchuri5/fl3/z2/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "123",
+    "path": "chamchuri5/fl3/z3/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "124",
+    "path": "chamchuri5/fl3/z3/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "125",
+    "path": "chamchuri5/fl3/z4/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "126",
+    "path": "chamchuri5/fl3/z4/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "127",
+    "path": "chamchuri5/fl3/z4/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "128",
+    "path": "chamchuri5/fl3/z5/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "129",
+    "path": "chamchuri5/fl3/z5/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "130",
+    "path": "chamchuri5/fl3/z5/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "131",
+    "path": "chamchuri5/fl5/z3/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "132",
+    "path": "chamchuri5/fl5/z3/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "133",
+    "path": "chamchuri5/fl5/z5/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "134",
+    "path": "chamchuri5/fl5/z5/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "135",
+    "path": "chamchuri5/fl5/z5/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "136",
+    "path": "chamchuri5/fl5/z4/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "137",
+    "path": "chamchuri5/fl5/z4/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "138",
+    "path": "chamchuri5/fl5/z4/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "139",
+    "path": "chamchuri5/fl7/z1/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "140",
+    "path": "chamchuri5/fl7/z1/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "141",
+    "path": "chamchuri5/fl7/z1/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "142",
+    "path": "chamchuri5/fl7/z2/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "159",
+    "path": "chamchuri5/fl7/z4/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "160",
+    "path": "chamchuri5/fl7/z5/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "161",
+    "path": "chamchuri5/fl7/z5/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "162",
+    "path": "chamchuri5/fl7/z3/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "164",
+    "path": "chamchuri5/fl7/z3/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "165",
+    "path": "chamchuri5/fl7/z3/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "166",
+    "path": "chamchuri5/fl7/z4/elevator_hall/shaft_room/light"
+  },
+  {
+    "id": "167",
+    "path": "chamchuri5/fl7/z4/elevator_hall/shaft_room/aircon"
+  },
+  {
+    "id": "171",
+    "path": "chamchuri5/fl7/z2/elevator_hall/shaft_room/outlet"
+  },
+  {
+    "id": "172",
+    "path": "chamchuri5/fl7/z2/elevator_hall/shaft_room/light"
+  }
+]

@@ -35,18 +35,21 @@ const writeToStorage = async (data) => {
 const formatPath = (data: CubemsData, idInfo: any[]) => {
   const url = String(data.pointid[0].name);
   const info = idInfo.filter((i) => i.PointID === url);
+  if (info[0]?.S === "1") return null;
   let zone;
   if (info[0]?.Z1 === "1") zone = 1;
   if (info[0]?.Z2 === "1") zone = 2;
   if (info[0]?.Z3 === "1") zone = 3;
   if (info[0]?.Z4 === "1") zone = 4;
   if (info[0]?.Z5 === "1") zone = 5;
+  // exclude data that is not in any zone
+  if (!zone) return null;
   const removed = url
     .replace("http://chamchuri5.chula.ac.th/", "")
     .replace("chamchuri5.chula.ac.th/", "")
     .split("/")
     .splice(0, 4);
-  if (zone) removed.splice(2, 0, `z${zone}`);
+  removed.splice(2, 0, `z${zone}`);
   removed.push(data.name);
   return removed
     .join("/")
@@ -76,7 +79,7 @@ export default async (num: number) => {
         result && result.pointid.length > 0
           ? {
               id: i,
-              path: formatPath(result, idInfos).toLowerCase(),
+              path: formatPath(result, idInfos)?.toLowerCase(),
             }
           : null
       );
@@ -84,7 +87,7 @@ export default async (num: number) => {
       await delay(500);
     }
 
-    await writeToJson(data.filter((val) => val));
+    await writeToJson(data.filter((val) => val && val.path));
     // await writeToStorage(data);
   } catch (error) {
     console.error(error);

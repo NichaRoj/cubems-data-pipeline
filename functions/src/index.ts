@@ -1,28 +1,20 @@
 import * as functions from "firebase-functions";
 import axios from "axios";
 import { cloneDeep } from "lodash";
-import { bucket } from "./firebase";
 import { google } from "googleapis";
+import { bucket } from "./firebase";
+import endpoints from "./endpoints.json";
 
 const baseUrl = (
-  id: number,
+  id: string | number,
   period: "day" | "month" | "year",
   type: "peak" | "energy"
 ) =>
   `https://www.bems.chula.ac.th/web/cham5-api/api/v1/building/${id}/building_usage/${period}/${type}`;
 
-const extractLocation = (data: CubemsData) => {
-  const locations = data.pointid[0].name.substring(30).split("/");
-  return (
-    locations.slice(0, 4).join("/") +
-    "/" +
-    data.name.toLowerCase().replace(" ", "_")
-  );
-};
-
 const headers = ["Timestamp", "Value"];
 
-const extractData = (data: CubemsData) => {
+const formatToCsv = (data: CubemsData) => {
   const raw = cloneDeep(data.graph);
   let points = raw.map((point) => `${point.x},${point.y}`);
   points.unshift(headers.join(","));
@@ -30,15 +22,44 @@ const extractData = (data: CubemsData) => {
   return csv;
 };
 
-export const import_every_fifteen = functions
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const importData = async (type: "air" | "light" | "outlet") => {
+  for (const endpoint of endpoints) {
+    try {
+      if (endpoint.path.includes(type)) {
+        const result = await axios.get(baseUrl(endpoint.id, "day", "peak"));
+        const data = result.data as CubemsData;
+        await bucket.file(endpoint.path + ".csv").save(formatToCsv(data));
+
+        await delay(1000);
+      }
+    } catch (error) {
+      console.error(`Error at ID ${endpoint.id}: ${error}`);
+    }
+  }
+};
+
+export const import_aircon = functions
+  .runWith({ timeoutSeconds: 500 })
   .region("asia-east2")
   .pubsub.schedule("every 15 minutes")
   .timeZone("Asia/Bangkok")
-  .onRun(async (context) => {
-    const result = await axios.get(baseUrl(101, "day", "peak"));
-    const data = result.data as CubemsData;
-    await bucket.file(extractLocation(data) + ".csv").save(extractData(data));
-  });
+  .onRun(async (context) => await importData("air"));
+
+// export const import_light = functions
+//   .runWith({ timeoutSeconds: 500 })
+//   .region("asia-east2")
+//   .pubsub.schedule("every 15 minutes")
+//   .timeZone("Asia/Bangkok")
+//   .onRun(async (context) => await importData("light"));
+
+// export const import_outlet = functions
+//   .runWith({ timeoutSeconds: 500 })
+//   .region("asia-east2")
+//   .pubsub.schedule("every 15 minutes")
+//   .timeZone("Asia/Bangkok")
+//   .onRun(async (context) => await importData("outlet"));
 
 export const csv_to_bq = functions
   .region("asia-east2")
