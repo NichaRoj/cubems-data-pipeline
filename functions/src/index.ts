@@ -25,19 +25,20 @@ const formatToCsv = (data: CubemsData) => {
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const importData = async (type: "air" | "light" | "outlet") => {
-  for (const endpoint of endpoints) {
-    try {
-      if (endpoint.path.includes(type)) {
-        const result = await axios.get(baseUrl(endpoint.id, "day", "peak"));
-        const data = result.data as CubemsData;
-        await bucket.file(endpoint.path + ".csv").save(formatToCsv(data));
+  const endpoint = endpoints[0];
+  // for (const endpoint of endpoints) {
+  try {
+    // if (endpoint.path.includes(type)) {
+    const result = await axios.get(baseUrl(endpoint.id, "day", "peak"));
+    const data = result.data as CubemsData;
+    await bucket.file(endpoint.path + ".csv").save(formatToCsv(data));
 
-        await delay(1000);
-      }
-    } catch (error) {
-      console.error(`Error at ID ${endpoint.id}: ${error}`);
-    }
+    await delay(1000);
+    // }
+  } catch (error) {
+    console.error(`Error at ID ${endpoint.id}: ${error}`);
   }
+  // }
 };
 
 export const import_aircon = functions

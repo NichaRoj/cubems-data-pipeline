@@ -44,10 +44,10 @@ def run(argv=None):
   '''.format(project=known_args.projectID, bucket=known_args.bucket, template_name=known_args.template, pipeline_args=' '.join(pipeline_args), requirements=requirements)
     os.system(command)
 
-#     os.system('''
-#     gsutil cp {template_name}_metadata \
-#       gs://{bucket}/templates/
-#   '''.format(bucket=known_args.bucket, template_name=known_args.template))
+    os.system('''
+    gsutil cp {template_name}_metadata \
+      gs://{bucket}/templates/
+  '''.format(bucket=known_args.bucket, template_name=known_args.template))
 
 
 if __name__ == '__main__':

@@ -24,6 +24,7 @@ class ImportOptions(PipelineOptions):
 def run():
     import re
     import datetime
+    import time
 
     def string_to_dict(col_names, string_input):
         """
@@ -52,6 +53,11 @@ def run():
         ]
     }
 
+    def filter_only_recent(input):
+        current_time = time.time()
+        timestamp = int(input['timestamp'])//1000
+        return current_time - timestamp <= 15 * 60 and current_time - timestamp >= 0
+
     pipeline_options = PipelineOptions()
     pipeline_options.view_as(SetupOptions).save_main_session = True
     runtime_params = PipelineOptions().view_as(ImportOptions)
@@ -59,6 +65,7 @@ def run():
     (p
      | 'Read CSV' >> beam.io.ReadFromText(runtime_params.input, skip_header_lines=1)
      | 'Transform string to dictionary' >> beam.Map(lambda s: string_to_dict(get_names_from_schema(schema), s))
+     | 'Filter only recent' >> beam.Filter(filter_only_recent)
      | 'Transform string to valid timestamp' >> beam.Map(lambda s: milli_to_datetime(s))
      | 'Write to BigQuery' >> beam.io.WriteToBigQuery(
          runtime_params.output,
