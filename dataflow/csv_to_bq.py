@@ -15,10 +15,6 @@ class ImportOptions(PipelineOptions):
             '--input',
             type=str
         )
-        parser.add_value_provider_argument(
-            '--output',
-            type=str
-        )
 
 
 def run():
@@ -37,7 +33,6 @@ def run():
         return row
 
     def milli_to_datetime(input):
-
         output = input.copy()
         dt = datetime.datetime.fromtimestamp(int(input['timestamp'])//1000)
         output['timestamp'] = dt.strftime('%Y-%m-%d %H:%M:%S')
@@ -48,15 +43,11 @@ def run():
 
     schema = {
         'fields': [
+            {'name': 'path', 'type': 'STRING', 'mode': 'REQUIRED'},
             {'name': 'timestamp', 'type': 'DATETIME', 'mode': 'REQUIRED'},
             {'name': 'value', 'type': 'NUMERIC', 'mode': 'NULLABLE'}
         ]
     }
-
-    def filter_only_recent(input):
-        current_time = time.time()
-        timestamp = int(input['timestamp'])//1000
-        return current_time - timestamp <= 15 * 60 and current_time - timestamp >= 0
 
     pipeline_options = PipelineOptions()
     pipeline_options.view_as(SetupOptions).save_main_session = True
@@ -65,10 +56,9 @@ def run():
     (p
      | 'Read CSV' >> beam.io.ReadFromText(runtime_params.input, skip_header_lines=1)
      | 'Transform string to dictionary' >> beam.Map(lambda s: string_to_dict(get_names_from_schema(schema), s))
-     | 'Filter only recent' >> beam.Filter(filter_only_recent)
      | 'Transform string to valid timestamp' >> beam.Map(lambda s: milli_to_datetime(s))
      | 'Write to BigQuery' >> beam.io.WriteToBigQuery(
-         runtime_params.output,
+         'cubems-data-pipeline:raw_data.first_imported_data',
          schema=schema,
          create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
          write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)

@@ -39,6 +39,8 @@ def run(argv=None):
       --temp_location gs://{bucket}/temp \
       --template_location gs://{bucket}/templates/{template_name} \
       --region asia-east1 \
+      --no_use_public_ips \
+      --subnetwork https://www.googleapis.com/compute/v1/projects/cubems-data-pipeline/regions/asia-east1/subnetworks/default \
       --service_account_email=dataflow-service@cubems-data-pipeline.iam.gserviceaccount.com \
       {pipeline_args}
   '''.format(project=known_args.projectID, bucket=known_args.bucket, template_name=known_args.template, pipeline_args=' '.join(pipeline_args), requirements=requirements)
