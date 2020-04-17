@@ -35,10 +35,17 @@ def run(argv=None):
 
     schema = {
         'fields': [
+            {'name': 'path', 'type': 'STRING', 'mode': 'REQUIRED'},
             {'name': 'timestamp', 'type': 'DATETIME', 'mode': 'REQUIRED'},
             {'name': 'value', 'type': 'NUMERIC', 'mode': 'NULLABLE'}
         ]
     }
+
+    def round_value(input):
+        output = input.copy()
+        rounded_value = round(float(input['value']), 9)
+        output['value'] = rounded_value
+        return output
 
     # Command Line Options
     parser = argparse.ArgumentParser()
@@ -69,11 +76,12 @@ def run(argv=None):
      | 'Read CSV' >> beam.io.ReadFromText(args.input, skip_header_lines=1)
      | 'Transform string to dictionary' >> beam.Map(lambda s: string_to_dict(get_names_from_schema(schema), s))
      | 'Transform string to valid timestamp' >> beam.Map(lambda s: milli_to_datetime(s))
+     | 'Round value to 9 decimal palces' >> beam.Map(lambda s: round_value(s))
      | 'Write to BigQuery' >> beam.io.WriteToBigQuery(
          args.output,
          schema=schema,
          create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
-         write_disposition=beam.io.BigQueryDisposition.WRITE_TRUNCATE)
+         write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
      )
 
     p.run().wait_until_finish()

@@ -1,36 +1,8 @@
 import axios from "axios";
 import { range } from "lodash";
-import { promises as fs } from "fs";
-import { Storage } from "@google-cloud/storage";
 import csv from "csvtojson";
-
-interface PointId {
-  id: number;
-  type: string;
-  name: string;
-}
-
-interface CubemsData {
-  id: number;
-  name: string;
-  level_name: string;
-  pointid: PointId[];
-}
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const url = (id) =>
-  `https://www.bems.chula.ac.th/web/cham5-api/api/v1/building/${id}/building_usage/day/peak`;
-
-const writeToJson = async (data) => {
-  await fs.writeFile("endpoints.json", JSON.stringify(data, null, 2));
-};
-
-const writeToStorage = async (data) => {
-  const storage = new Storage();
-  const bucket = storage.bucket("cubems-data-pipeline.appspot.com");
-  await bucket.file("endpoints.json").save(JSON.stringify(data, null, 2));
-};
+import { delay, writeToJson, url } from "./util";
+import { CubemsData } from "./interface";
 
 const formatPath = (data: CubemsData, idInfo: any[]) => {
   const url = String(data.pointid[0].name);

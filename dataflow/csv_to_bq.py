@@ -49,6 +49,12 @@ def run():
         ]
     }
 
+    def round_value(input):
+        output = input.copy()
+        rounded_value = round(float(input['value']), 9)
+        output['value'] = rounded_value
+        return output
+
     pipeline_options = PipelineOptions()
     pipeline_options.view_as(SetupOptions).save_main_session = True
     runtime_params = PipelineOptions().view_as(ImportOptions)
@@ -57,6 +63,7 @@ def run():
      | 'Read CSV' >> beam.io.ReadFromText(runtime_params.input, skip_header_lines=1)
      | 'Transform string to dictionary' >> beam.Map(lambda s: string_to_dict(get_names_from_schema(schema), s))
      | 'Transform string to valid timestamp' >> beam.Map(lambda s: milli_to_datetime(s))
+     | 'Round value to 9 decimal palces' >> beam.Map(lambda s: round_value(s))
      | 'Write to BigQuery' >> beam.io.WriteToBigQuery(
          'cubems-data-pipeline:raw_data.first_imported_data',
          schema=schema,
