@@ -19,6 +19,7 @@ const headers = [
   "area",
   "sub_area",
   "sensor",
+  "pointid",
   "datetime",
   "date",
   "time",
@@ -34,6 +35,15 @@ const formatToCsv = (raw: any[]) => {
 };
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const formatSensor = (sensor: string) => {
+  if (sensor.includes("air")) return "aircon";
+  if (sensor.includes("light")) return "light";
+  if (sensor.includes("outlet")) return "outlet";
+  if (sensor.includes("smartplug")) return "smart_plug";
+  if (sensor.includes("smartlight")) return "smart_light";
+  return sensor;
+};
 
 const importData = async () => {
   // Import and format data
@@ -60,7 +70,8 @@ const importData = async () => {
           zone,
           area,
           sub_area,
-          sensor: sensor === "air" ? "aircon" : sensor,
+          sensor: formatSensor(sensor),
+          pointid: endpoint.pointid.join(" | "),
           datetime: point.x,
           date: point.x,
           time: point.x,
@@ -84,7 +95,7 @@ const importData = async () => {
 };
 
 export const import_every_fifteen = functions
-  .runWith({ timeoutSeconds: 500 })
+  .runWith({ timeoutSeconds: 540 })
   .region("asia-east2")
   .pubsub.schedule("every 15 minutes")
   .timeZone("Asia/Bangkok")

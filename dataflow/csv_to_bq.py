@@ -57,6 +57,7 @@ def run():
             {'name': 'area', 'type': 'STRING', 'mode': 'NULLABLE'},
             {'name': 'sub_area', 'type': 'STRING', 'mode': 'NULLABLE'},
             {'name': 'sensor', 'type': 'STRING', 'mode': 'NULLABLE'},
+            {'name': 'pointid', 'type': 'STRING', 'mode': 'NULLABLE'},
             {'name': 'datetime', 'type': 'DATETIME', 'mode': 'REQUIRED'},
             {'name': 'date', 'type': 'DATE', 'mode': 'NULLABLE'},
             {'name': 'time', 'type': 'TIME', 'mode': 'NULLABLE'},

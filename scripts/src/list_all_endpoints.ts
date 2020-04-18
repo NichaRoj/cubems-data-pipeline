@@ -8,14 +8,13 @@ const formatPath = (data: CubemsData, idInfo: any[]) => {
   const url = String(data.pointid[0].name);
   const info = idInfo.filter((i) => i.PointID === url);
   if (info[0]?.S === "1") return null;
-  let zone;
+  let zone = 0;
   if (info[0]?.Z1 === "1") zone = 1;
   if (info[0]?.Z2 === "1") zone = 2;
   if (info[0]?.Z3 === "1") zone = 3;
   if (info[0]?.Z4 === "1") zone = 4;
   if (info[0]?.Z5 === "1") zone = 5;
-  // exclude data that is not in any zone
-  if (!zone) return null;
+
   const removed = url
     .replace("http://chamchuri5.chula.ac.th/", "")
     .replace("chamchuri5.chula.ac.th/", "")
@@ -52,6 +51,7 @@ export default async (num: number) => {
           ? {
               id: i,
               path: formatPath(result, idInfos)?.toLowerCase(),
+              pointid: result.pointid.map((each) => each.id),
             }
           : null
       );
