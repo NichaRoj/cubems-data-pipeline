@@ -20,7 +20,7 @@ def run(argv=None):
 
     parser.add_argument(
         '--bucket',
-        default='cubems-data-pipeline.appspot.com'
+        default='cubems-data-pipeline_asia-southeast1'
     )
 
     parser.add_argument('--requirements_file')

@@ -21,6 +21,7 @@ def run():
     import re
     import datetime
     import time
+    from pytz import timezone
 
     def string_to_dict(col_names, string_input):
         """
@@ -34,8 +35,14 @@ def run():
 
     def milli_to_datetime(input):
         output = input.copy()
-        dt = datetime.datetime.fromtimestamp(int(input['timestamp'])//1000)
-        output['timestamp'] = dt.strftime('%Y-%m-%d %H:%M:%S')
+        dt = datetime.datetime.fromtimestamp(
+            int(input['datetime'])//1000, timezone('Asia/Bangkok'))
+        lc = datetime.datetime.fromtimestamp(
+            int(input['last_created'])//1000, timezone('Asia/Bangkok'))
+        output['datetime'] = dt.strftime('%Y-%m-%d %H:%M:%S')
+        output['date'] = dt.strftime('%Y-%m-%d')
+        output['time'] = dt.strftime('%H:%M:%S')
+        output['last_created'] = lc.strftime('%Y-%m-%d %H:%M:%S+07:00')
         return output
 
     def get_names_from_schema(input):
@@ -44,8 +51,17 @@ def run():
     schema = {
         'fields': [
             {'name': 'path', 'type': 'STRING', 'mode': 'REQUIRED'},
-            {'name': 'timestamp', 'type': 'DATETIME', 'mode': 'REQUIRED'},
-            {'name': 'value', 'type': 'NUMERIC', 'mode': 'NULLABLE'}
+            {'name': 'building', 'type': 'STRING', 'mode': 'NULLABLE'},
+            {'name': 'floor', 'type': 'STRING', 'mode': 'NULLABLE'},
+            {'name': 'zone', 'type': 'STRING', 'mode': 'NULLABLE'},
+            {'name': 'area', 'type': 'STRING', 'mode': 'NULLABLE'},
+            {'name': 'sub_area', 'type': 'STRING', 'mode': 'NULLABLE'},
+            {'name': 'sensor', 'type': 'STRING', 'mode': 'NULLABLE'},
+            {'name': 'datetime', 'type': 'DATETIME', 'mode': 'REQUIRED'},
+            {'name': 'date', 'type': 'DATE', 'mode': 'NULLABLE'},
+            {'name': 'time', 'type': 'TIME', 'mode': 'NULLABLE'},
+            {'name': 'value', 'type': 'NUMERIC', 'mode': 'NULLABLE'},
+            {'name': 'last_created', 'type': 'TIMESTAMP', 'mode': 'REQUIRED'}
         ]
     }
 
@@ -65,7 +81,7 @@ def run():
      | 'Transform string to valid timestamp' >> beam.Map(lambda s: milli_to_datetime(s))
      | 'Round value to 9 decimal palces' >> beam.Map(lambda s: round_value(s))
      | 'Write to BigQuery' >> beam.io.WriteToBigQuery(
-         'cubems-data-pipeline:raw_data.first_imported_data',
+         'cubems-data-pipeline:raw_chamchuri5.temp_data',
          schema=schema,
          create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED,
          write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND)
